@@ -1,0 +1,34 @@
+services:
+  load-balancer:
+    image: nginx:latest
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: "15MB"
+  # My backend
+  go-api-1:
+    build:
+      context: go-api/
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ../go-api:/app
+    networks:
+      - backend
+      - payment-processor
+    ports:
+      - 8080:8080
+    environment:
+      - PAYMENT_PROCESSOR_URL_DEFAULT=http://payment-processor-default:8080
+      - PAYMENT_PROCESSOR_URL_FALLBACK=http://payment-processor-fallback:8080
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "150MB"
+
+networks:
+  backend:
+    driver: bridge
+  payment-processor:
+    external: true
