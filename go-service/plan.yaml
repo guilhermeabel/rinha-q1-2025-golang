@@ -1,0 +1,22 @@
+# http server
+- process payment request
+- enqueue payment
+
+# worker
+- dequeue item
+- calls process payment service
+- get processor name to use from cache
+- if it fails, retry with fallback
+- if fallback works, store info that default is down
+- if fallback does not work, store info that both are down and enqueue this payment again
+
+# signal
+- keeps track of payment processors statuses and cooldown for healthcheck
+- runs on a schedule (tbd - initial 1000ms) and if cooldown is over, check status again
+- updates statuses on redis
+
+# explanation
+- this way, the worker notifies the 'failing' status, and the signal (processor manager) only concerns with checking if it's failing, and checking the status endpoint to see if it's back on
+- it does this for both default, fallback. if both are down, the service is just supposed to put the payment back at the end of the queue, and move on
+- the expectation here is that this will allow most of the payments to be processed asap, while prioritizing the default processor (cheaper)
+- we also have to respect the 5s cooldown at all costs to avoid being rate limited, we can only check status again after 5s for any processor that's failing
