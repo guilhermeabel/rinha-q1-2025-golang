@@ -17,23 +17,20 @@ type ProcessorStatus struct {
 }
 
 type ProcessorManager struct {
-	rc                  *redis.Client
-	healthCheckCooldown time.Duration
-	ppp                 gateway.PaymentProcessorInterface
-	spp                 gateway.PaymentProcessorInterface
+	rc  *redis.Client
+	ppp gateway.PaymentProcessorInterface
+	spp gateway.PaymentProcessorInterface
 }
 
 func NewProcessorManager(
 	redisClient *redis.Client,
-	healthCheckCooldown time.Duration,
 	ppp gateway.PaymentProcessorInterface,
 	spp gateway.PaymentProcessorInterface,
 ) *ProcessorManager {
 	return &ProcessorManager{
-		rc:                  redisClient,
-		healthCheckCooldown: healthCheckCooldown,
-		ppp:                 ppp,
-		spp:                 spp,
+		rc:  redisClient,
+		ppp: ppp,
+		spp: spp,
 	}
 }
 

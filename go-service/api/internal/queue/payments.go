@@ -64,7 +64,6 @@ func (pq *PaymentQueue) Dequeue() (*dtos.Payment, error) {
 		return nil, internalErrors.ErrNoPaymentsInQueue
 	}
 
-	// Parse the payment from the first result
 	var payment dtos.Payment
 	memberStr, ok := result[0].Member.(string)
 	if !ok {

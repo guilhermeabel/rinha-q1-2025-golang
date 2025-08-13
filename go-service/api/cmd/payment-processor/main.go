@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"go-service/internal/config"
 	"go-service/internal/gateway"
 	"go-service/internal/queue"
 	"go-service/internal/server"
@@ -59,7 +58,7 @@ func main() {
 
 	primaryPaymentProcessor := gateway.NewPaymentProcessor(os.Getenv("PAYMENT_PROCESSOR_URL_DEFAULT"))
 	secondaryPaymentProcessor := gateway.NewPaymentProcessor(os.Getenv("PAYMENT_PROCESSOR_URL_FALLBACK"))
-	processorManager := services.NewProcessorManager(redisClient, config.HealthCheckCooldown, primaryPaymentProcessor, secondaryPaymentProcessor)
+	processorManager := services.NewProcessorManager(redisClient, primaryPaymentProcessor, secondaryPaymentProcessor)
 
 	q, err := queue.NewPaymentQueue(redisClient)
 	if err != nil {

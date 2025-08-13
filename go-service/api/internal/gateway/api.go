@@ -13,10 +13,10 @@ import (
 )
 
 var httpClient = &http.Client{
-	Timeout: 2 * time.Second, // Reduced from 3s for faster operations
+	Timeout: 2 * time.Second,
 	Transport: &http.Transport{
-		MaxIdleConns:        100, // Reduced from 200 to reduce contention
-		MaxIdleConnsPerHost: 25,  // Reduced from 50 to reduce contention
+		MaxIdleConns:        100,
+		MaxIdleConnsPerHost: 25,
 		IdleConnTimeout:     10 * time.Second,
 		DisableCompression:  true,
 		DisableKeepAlives:   false,
